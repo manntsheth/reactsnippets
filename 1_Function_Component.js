@@ -1,7 +1,7 @@
-const Button = function(){
+const Button = function(props){
 	return (
-  	<button>Go</button>
+  	<button>{props.label}</button>
   );
 }
 
-ReactDOM.render(<Button />, mountNode);
+ReactDOM.render( < Button label = "Do" / > , mountNode);
