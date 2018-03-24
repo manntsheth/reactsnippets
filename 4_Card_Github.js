@@ -20,10 +20,17 @@ const CardList = (props) => {
 }
 
 class Form extends React.Component {
+    handleSubmit = (event) => {
+        event.preventDefault(); //to stop the page from refreshing
+        console.log('Event: Form submit', this.userNameInput.value);
+    };
+    
     render(){
         return(
-            <form>
-                <input type = "text" placeholder="Github username"/>
+            <form onSubmit={this.handleSubmit}>
+                <input type = "text" 
+                    ref = {(input) => this.userNameInput = input}
+                    placeholder="Github username" required/>
                 <button type="submit"> Add card </button>
             </form>
         );
