@@ -2,7 +2,7 @@ const Card = (props) => {
     const innerDivStyle = { display: 'inline-block', marginLeft: 15, color: 'red' }
     return (
         <div style={{ margin: '1em' }}>
-            <img width="75" src = {props.avatar_url}  />
+			<img width="75" src = {props.avatar_url}  />
             <div style={innerDivStyle}>
                 <div style={{ fontSize: '1.25em', fontWeight: 'bold' }}>{props.name}</div>
                 <div>{props.company}</div>
