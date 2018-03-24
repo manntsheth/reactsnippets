@@ -14,22 +14,30 @@ const Card = (props) => {
 const CardList = (props) => {
     return(
         <div>
-           {props.cards.map(card=><Card {...card}/>)}
+           {props.cards.map(card=><Card key={card.id }{...card}/>)}
         </div>
     );
 }
 
 class Form extends React.Component {
+    state = {userName:''}
     handleSubmit = (event) => {
         event.preventDefault(); //to stop the page from refreshing
-        console.log('Event: Form submit', this.userNameInput.value);
+        //console.log('Event: Form submit', this.state.userName);
+        axios.get('https://api.github.com/users/'+this.state.userName)
+        .then(resp=>{
+            //console.log(resp);
+            this.props.onSubmit(resp.data);
+            this.setState({userName: ''});
+        });
     };
     
     render(){
         return(
             <form onSubmit={this.handleSubmit}>
                 <input type = "text" 
-                    ref = {(input) => this.userNameInput = input}
+                    value = {this.state.userName}
+                    onChange={(event) => this.setState({userName: event.target.value})}
                     placeholder="Github username" required/>
                 <button type="submit"> Add card </button>
             </form>
@@ -39,23 +47,20 @@ class Form extends React.Component {
 
 class App extends React.Component {
     state ={
-        cards: [{
-                name: "Name 1",
-                avatar_url: "https://avatars3.githubusercontent.com/u/7351847?v=4",
-                company: "Company 1"
-            },
-            {
-                name: "Name 2",
-                avatar_url: "https://avatars3.githubusercontent.com/u/7351847?v=4",
-                company: "Company 2"
-            }
-        ]
+        cards: []
     }; 
+
+    addNewCard = (cardInfo) => {
+        //console.log(cardInfo);
+        this.setState(prevState => ({
+            cards: prevState.cards.concat(cardInfo)
+        }));
+    };
 
     render(){
         return(
             <div>
-                <Form/>
+                <Form onSubmit={this.addNewCard}/>
                 <CardList cards={this.state.cards}/>
             </div>
         );
