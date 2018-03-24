@@ -1,9 +1,11 @@
 const Stars = (props) => {
+    const numberOfStars = 1+ Math.floor(Math.random()*9);
+    let stars = [];
+    for(let i=0;i<numberOfStars;i++){
+        stars.push(<i key={i} className="fa fa-star"></i>);
+    }
     return (<div className="col-5"> 
-                <i className="fa fa-star"></i>
-                <i className="fa fa-star"></i>
-                <i className="fa fa-star"></i>
-                <i className="fa fa-star"></i>
+            {stars}     
             </div>);
 }
 
@@ -16,12 +18,14 @@ const Answer = (props) => {
 }
 
 const Numbers = (props) => {
+    const arrayOfNumbers = _.range(1,9);
+
     return (
         <div className="card text-center">
             <div>
-                <span className="selected">1</span>
-                <span className="used">2</span>
-                <span>3</span>
+                {arrayOfNumbers.map((number, i) => (
+                    <span key={i}>{number}</span>
+                ))}
             </div>
         </div>
     );
