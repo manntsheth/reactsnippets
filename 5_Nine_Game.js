@@ -24,7 +24,13 @@ const Button = (props) => {
             button = <button className="btn" onClick={props.checkAnswer} disabled={props.selectedNumbers.length==0}>=</button>;
             break;
     }
-    return (<div className="col-2"> {button} </div>);
+    return (<div className="col-2 text-center">
+                {button} 
+                <br/> <br/>
+                <button className="btn btn-warning btn-sm" onClick={props.redraw} disabled={props.redraws === 0}>
+                    < i className = "fa fa-sync" > </i>{props.redraws}
+                </button>
+            </div>);
 }
 
 const Answer = (props) => {
@@ -63,13 +69,26 @@ const Numbers = (props) => {
 Numbers.list = _.range(1, 10);  //gets shared with all the instances of the component, 
 //does not get created again and again when Numbers component is rendered multiple times
 
+const DoneFrame = (props) => {
+    return (
+        <div className="text-center">
+            <h2>{props.doneStatus}</h2>
+        </div>
+    );
+};
+
 class Game extends React.Component {
+    
+    static randomNumber = () => 1 + Math.floor(Math.random() * 9);
     state = {
         selectedNumbers: [],
-        randomNumberOfStars: 1+ Math.floor(Math.random()*9),
+        randomNumberOfStars: Game.randomNumber(),
         answerIsCorrect : null,
-        usedNumbers : []
+        usedNumbers : [],
+        redraws: 5,
+        doneStatus: 'Game Over!'
     };
+
 
     selectNumber = (clickedNumber) => {
         if(this.state.selectedNumbers.indexOf(clickedNumber) >=0){ return; }
@@ -97,25 +116,42 @@ class Game extends React.Component {
             usedNumbers: prevState.usedNumbers.concat(prevState.selectedNumbers),
             selectedNumbers: [],
             answerIsCorrect: null,
-            randomNumberOfStars: 1 + Math.floor(Math.random() * 9)
+            randomNumberOfStars: Game.randomNumber()
+        }));
+    };
+
+    redraw = () => {
+        if(this.state.redraws == 0) return;
+        this.setState((prevState) => ({
+            randomNumberOfStars: Game.randomNumber(),
+            answerIsCorrect: null,
+            selectedNumbers: [],
+            redraws: prevState.redraws -1
         }));
     };
 
     render() {
-        const {selectedNumbers, randomNumberOfStars, answerIsCorrect, usedNumbers} = this.state;
+        const {selectedNumbers, randomNumberOfStars, answerIsCorrect, usedNumbers, redraws, doneStatus} = this.state;
         return (
             <div className="ccontainer">
                 <h3>Play Nine</h3>
                 <hr />
                 <div className="row">
                     <Stars numberOfStars= {randomNumberOfStars}/>
-                    <Button selectedNumbers = {selectedNumbers} checkAnswer={this.checkAnswer} answerIsCorrect={answerIsCorrect} acceptAnswer={this.acceptAnswer} />
+                    <Button selectedNumbers = {selectedNumbers} 
+                            checkAnswer={this.checkAnswer} answerIsCorrect={answerIsCorrect} 
+                            acceptAnswer={this.acceptAnswer} redraw={this.redraw}
+                            redraws = {redraws} />
                     <Answer selectedNumbers={selectedNumbers} removeNumber={this.unselectAnswer} />
                 </div>
                 <br />
-                <Numbers selectedNumbers={selectedNumbers}
-                    selectNumber={this.selectNumber} usedNumbers={usedNumbers}
-                />
+                {doneStatus ? 
+                    <DoneFrame doneStatus={doneStatus}/> :
+                    <Numbers selectedNumbers={selectedNumbers} selectNumber={this.selectNumber} usedNumbers={usedNumbers}/>
+                }
+
+                < br / >
+                
             </div>
         );
     };
