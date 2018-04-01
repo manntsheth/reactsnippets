@@ -12,7 +12,7 @@ const Stars = (props) => {
 }
 
 const Button = (props) => {
-    return (<div className="col-2"> <button>=</button> </div>);
+    return (<div className="col-2"> <button className="btn" disabled={props.selectedNumbers.length==0}>=</button> </div>);
 }
 
 const Answer = (props) => {
@@ -68,17 +68,18 @@ class Game extends React.Component {
     };
 
     render() {
+        const {selectedNumbers, randomNumberOfStars} = this.state;
         return (
             <div className="ccontainer">
                 <h3>Play Nine</h3>
                 <hr />
                 <div className="row">
-                    <Stars numberOfStars= {this.state.randomNumberOfStars}/>
-                    <Button />
-                    <Answer selectedNumbers={this.state.selectedNumbers} removeNumber={this.unselectAnswer} />
+                    <Stars numberOfStars= {randomNumberOfStars}/>
+                    <Button selectedNumbers = {selectedNumbers}/>
+                    <Answer selectedNumbers={selectedNumbers} removeNumber={this.unselectAnswer} />
                 </div>
                 <br />
-                <Numbers selectedNumbers={this.state.selectedNumbers}
+                <Numbers selectedNumbers={selectedNumbers}
                     selectNumber={this.selectNumber}
                 />
             </div>
