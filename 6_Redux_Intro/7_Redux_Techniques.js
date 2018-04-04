@@ -2,8 +2,43 @@
 //<script src="https://wzrd.in/standalone/deep-freeze@latest"></script>    
 
 const addCounter = (list) => {
-    list.push(0);
-    return list;
+    return list.concat([0]);
+    //or return [...list,0]; ES6 spread operator
+    //do not use list.push(0);
+}
+
+const removeCounter = (list, index) => {
+    //DON'T USE THIS 
+    //list.splice(index, 1);
+    // return list;
+
+    //USE THIS INSTEAD
+    return list.slice(0, index).concat(list.slice(index+1));
+    //OR in ES6 style
+    //  return [
+    //          ...list.slice(0, index), 
+    //          ...list.slice(index+1)
+    //      ];
+};
+
+const incrementCounter = (list, index) => {
+    // DON'T USE THIS
+    // list[index]++;
+    // return list;
+
+
+    //USE THIS INSTEAD
+    return list
+            .slice(0, index)
+            .concat([list[index]+1])
+            .concat(list.slice(index+1));
+
+    //ES6
+    // return [
+    //     ...list.slice(0, index),
+    //     list[index] + 1,
+    //     ...list.slice(index + 1)
+    // ];
 }
 
 const testAddCounter = () => {
@@ -15,5 +50,25 @@ const testAddCounter = () => {
     ).toEqual(listAfter);
 };
 
+const testRemoveCounter = () => {
+    const listBefore = [0,10,20];
+    const listAfter = [0,20];
+    deepFreeze(listBefore); //throws an error , because it does not allow modifying original array
+    expect(
+        removeCounter(listBefore,1)
+    ).toEqual(listAfter);
+};
+
+const testIncrementCounter = () => {
+    const listBefore = [0, 10, 20];
+    const listAfter = [0, 11,20];
+    deepFreeze(listBefore); //throws an error , because it does not allow modifying original array
+    expect(
+        incrementCounter(listBefore, 1)
+    ).toEqual(listAfter);
+};
+
 testAddCounter();
+testRemoveCounter();
+testIncrementCounter();
 console.log('All tests passed.');
