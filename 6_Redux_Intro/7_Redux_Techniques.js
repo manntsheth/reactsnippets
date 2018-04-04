@@ -7,6 +7,17 @@ const addCounter = (list) => {
     //do not use list.push(0);
 }
 
+const testAddCounter = () => {
+    const listBefore = [];
+    const listAfter = [0];
+    deepFreeze(listBefore); //throws an error , because it does not allow modifying original array
+    expect(
+        addCounter(listBefore)
+    ).toEqual(listAfter);
+};
+
+testAddCounter();
+
 const removeCounter = (list, index) => {
     //DON'T USE THIS 
     //list.splice(index, 1);
@@ -20,6 +31,17 @@ const removeCounter = (list, index) => {
     //          ...list.slice(index+1)
     //      ];
 };
+
+const testRemoveCounter = () => {
+    const listBefore = [0, 10, 20];
+    const listAfter = [0, 20];
+    deepFreeze(listBefore); //throws an error , because it does not allow modifying original array
+    expect(
+        removeCounter(listBefore, 1)
+    ).toEqual(listAfter);
+};
+
+testRemoveCounter();
 
 const incrementCounter = (list, index) => {
     // DON'T USE THIS
@@ -41,24 +63,6 @@ const incrementCounter = (list, index) => {
     // ];
 }
 
-const testAddCounter = () => {
-    const listBefore = [];
-    const listAfter = [0];
-    deepFreeze(listBefore); //throws an error , because it does not allow modifying original array
-    expect(
-        addCounter(listBefore)
-    ).toEqual(listAfter);
-};
-
-const testRemoveCounter = () => {
-    const listBefore = [0,10,20];
-    const listAfter = [0,20];
-    deepFreeze(listBefore); //throws an error , because it does not allow modifying original array
-    expect(
-        removeCounter(listBefore,1)
-    ).toEqual(listAfter);
-};
-
 const testIncrementCounter = () => {
     const listBefore = [0, 10, 20];
     const listAfter = [0, 11,20];
@@ -68,7 +72,40 @@ const testIncrementCounter = () => {
     ).toEqual(listAfter);
 };
 
-testAddCounter();
-testRemoveCounter();
 testIncrementCounter();
+
+
+const toggleTodo = (todo) => {
+    //DON'T USE
+    // todo.completed = !todo.completed;
+    // return todo;
+
+    return Object.assign({}, todo, {
+        completed: !todo.completed
+    });
+
+    //proposed for ES7
+    // return Object.assign(
+    //    ...todo, 
+    //     completed: !todo.completed
+    // );
+};
+
+const testToggleTodo = () => {
+    const todoBefore = {
+        id: 0,
+        text: 'Learn Redux',
+        completed: false
+    };
+    const todoAfter = {
+        id: 0,
+        text: 'Learn Redux',    
+        completed: true
+    };
+    deepFreeze(todoBefore); //throws an error , because it does not allow modifying original object
+    expect(
+        toggleTodo(todoBefore)
+    ).toEqual(todoAfter);
+};
+testToggleTodo();
 console.log('All tests passed.');
