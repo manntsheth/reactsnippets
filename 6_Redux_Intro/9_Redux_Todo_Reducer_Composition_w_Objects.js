@@ -57,12 +57,21 @@ const visibilityFilter = (state = 'SHOW_ALL', action)=> {
 //todoapp is having two reducers combined ('visibilityfilter', and 'todos' reducers)
 //point is both reducers' logic are independent, so different developers can use it independently 
 
-const todoApp = (state= {}, action) => {
-    return {
-        todos: todos(state.todos, action),
-        visibilityFilter: visibilityFilter(state.visibilityFilter, action)
-    };
-};
+// const todoApp = (state= {}, action) => {
+//     return {
+//         todos: todos(state.todos, action),
+//         visibilityFilter: visibilityFilter(state.visibilityFilter, action)
+//     };
+// };
+
+//following function combineReducers works same as commented code above
+const {combineReducers} = Redux;
+// const todoApp = combineReducers({
+//     todos: todos,
+//     visibilityFilter: visibilityFilter
+// });
+//ES6 style below
+const todoApp = combineReducers({todos, visibilityFilter});
 
 const {createStore} = Redux;
 const store = createStore(todoApp);
