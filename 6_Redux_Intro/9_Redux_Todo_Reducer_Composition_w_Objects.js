@@ -45,8 +45,27 @@ const todos = (state = [], action) => {
     }
 };
 
+const visibilityFilter = (state = 'SHOW_ALL', action)=> {
+    switch (action.type) {
+        case 'SET_VISIBILITY_FILTER':
+            return action.filter;
+        default:
+            return state;
+    }
+};
+
+//todoapp is having two reducers combined ('visibilityfilter', and 'todos' reducers)
+//point is both reducers' logic are independent, so different developers can use it independently 
+
+const todoApp = (state= {}, action) => {
+    return {
+        todos: todos(state.todos, action),
+        visibilityFilter: visibilityFilter(state.visibilityFilter, action)
+    };
+};
+
 const {createStore} = Redux;
-const store = createStore(todos);
+const store = createStore(todoApp);
 
 console.log('Initial State');
 console.log(store.getState());
@@ -85,3 +104,12 @@ console.log(store.getState());
 console.log('-------------');
 
 
+console.log('Dispatching SET_VISIBILITY_FILTER');
+store.dispatch({
+    type: 'SET_VISIBILITY_FILTER',
+    filter: 'SHOW COMPLETED FALSE',
+    id: 0
+});
+console.log('Current State');
+console.log(store.getState());
+console.log('-------------');
