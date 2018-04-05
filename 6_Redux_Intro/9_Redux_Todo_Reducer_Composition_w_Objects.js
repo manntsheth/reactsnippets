@@ -73,6 +73,26 @@ const {combineReducers} = Redux;
 //ES6 style below
 const todoApp = combineReducers({todos, visibilityFilter});
 
+//Implementation of combineReducers inside library
+//Here reducers input is a json object 
+// reducers = {
+//     todos: todos, 
+//     visibilityFilter: visibilityFilter
+// }
+//---Implementation below----
+// const combineReducers = (reducers) => {
+//     return (state = {}, action) => {
+//         return Object.keys(reducers).reduce((nextState, key) => {   // here nextState is accumulator which starts as {}, and ends as all reducers name as a key and reducer function definition as a value
+//             nextState[key] = reducers[key](state[key], action);
+//             return nextState;
+//         },{});
+//     };
+// };
+//Here the function is taking functions as input, and also giving back functions as output
+//const todoApp = combineReducers({ todos, visibilityFilter });
+//---Implementation ends---
+
+
 const {createStore} = Redux;
 const store = createStore(todoApp);
 
