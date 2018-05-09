@@ -63,8 +63,9 @@ const Link = ({ active, onClick, children }) => {
 };
 
 class FilterLink extends Component{
+    
     componentDidMount(){
-        this.unsubscribe = store.subscribe(()=>
+        this.unsubscribe = store.subscribe(() => 
             this.forceUpdate()
         );
     }
@@ -72,7 +73,7 @@ class FilterLink extends Component{
     componentWillUnmount(){
         this.unsubscribe();
     }
-    
+
     render(){
         const props = this.props;
         const state = store.getState();
